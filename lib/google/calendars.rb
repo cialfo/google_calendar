@@ -20,10 +20,10 @@ module Google
 
 
     # new method to get busy slots
-    def get_busy_slots(start_min, start_max)
+    def get_busy_slots(start_min, start_max, time_zone)
       result = Array.new
       @googleCalendars.each do |x|
-        result.push(x[:connection].query([x[:id]],start_min, start_max))
+        result.push(x[:connection].query([x[:id]],start_min, start_max, time_zone))
       end
       return result
     end
