@@ -39,8 +39,8 @@ module Google
     # * start_time => a Time object, the start of the interval for the query.
     # * end_time => a Time object, the end of the interval for the query.
     #
-    def query(calendar_ids, start_time, end_time)
-      query_content = json_for_query(calendar_ids, start_time, end_time)
+    def query(calendar_ids, start_time, end_time, time_zone)
+      query_content = json_for_query(calendar_ids, start_time, end_time, time_zone)
       response = @connection.send("/freeBusy", :post, query_content)
 
       return nil if response.status != 200 || response.body.empty?
@@ -53,11 +53,12 @@ module Google
     #
     # Prepare the JSON 
     #
-    def json_for_query(calendar_ids, start_time, end_time)
+    def json_for_query(calendar_ids, start_time, end_time, time_zone)
       {}.tap{ |obj|
         obj[:items] = calendar_ids.map {|id| Hash[:id, id] }
         obj[:timeMin] = start_time.utc.iso8601
         obj[:timeMax] = end_time.utc.iso8601
+	obj[:timeZone] = time_zone
       }.to_json
     end
 
