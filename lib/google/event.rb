@@ -396,7 +396,7 @@ module Google
       return {} unless recurrence_entry && recurrence_entry != []
 
       rrule = recurrence_entry[0].sub('RRULE:', '')
-      rhash = Hash[*rrule.downcase.split(/[=;]/)]
+      rhash = Hash[*rrule.downcase.split(/[=;:]/)]
 
       rhash[:until] = Time.parse(rhash[:until]) if rhash[:until]
       rhash
