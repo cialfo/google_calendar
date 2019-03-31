@@ -283,7 +283,7 @@ module Google
       query_string << "&maxResults=#{options[:max_results]}"
       query_string << "&singleEvents=#{options[:expand_recurring_events]}"
       query_string << "&q=#{options[:query]}" if options[:query].present?
-      query_string << "&timeZone=#{CGI::escape(options[:timezone]}" if options[:timezone].present?
+      query_string << "&timeZone=#{CGI::escape(options[:timezone])}" if options[:timezone].present?
       query_string
     end
 

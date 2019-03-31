@@ -30,7 +30,7 @@ module Google
   #
   class Event
     attr_reader :raw, :html_link, :status
-    attr_accessor :id, :title, :location, :calendar, :quickadd, :transparency, :attendees, :description, :reminders, :recurrence, :visibility, :creator_name, :color_id
+    attr_accessor :id, :title, :location, :calendar, :quickadd, :transparency, :attendees, :description, :reminders, :recurrence, :visibility, :creator_name, :color_id, :start_date, :end_date
 
     #
     # Create a new event, and optionally set it's attributes.
@@ -55,7 +55,7 @@ module Google
     #                   ]
     #
     def initialize(params = {})
-      [:id, :status, :raw, :html_link, :title, :location, :calendar, :quickadd, :attendees, :description, :reminders, :recurrence, :start_time, :end_time, :color_id].each do |attribute|
+      [:id, :status, :raw, :html_link, :title, :location, :calendar, :quickadd, :attendees, :description, :reminders, :recurrence, :start_time, :end_time, :start_date, :end_date, :color_id].each do |attribute|
         instance_variable_set("@#{attribute}", params[attribute])
       end
 
@@ -377,6 +377,8 @@ module Google
                 :creator      => e['creator'],
                 :start_time   => Event.parse_json_time(e['start']),
                 :end_time     => Event.parse_json_time(e['end']),
+                :start_date   => Event.parse_json_allday(e['start']),
+                :end_date     => Event.parse_json_allday(e['end']),
                 :transparency => e['transparency'],
                 :html_link    => e['htmlLink'],
                 :updated      => e['updated'],
@@ -410,6 +412,12 @@ module Google
       @raw = JSON.parse(response.body)
       @id = @raw['id']
       @html_link = @raw['htmlLink']
+    end
+
+    def self.parse_json_allday(date_hash) #:nodoc
+      return nil unless date_hash
+
+      date_hash['date']
     end
 
     def self.parse_json_time(time_hash)
