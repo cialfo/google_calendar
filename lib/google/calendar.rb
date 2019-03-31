@@ -279,7 +279,12 @@ module Google
       options[:max_results] ||=  25
       options[:order_by] ||= 'startTime' # other option is 'updated'
       options[:expand_recurring_events] ||= true
-      "&orderBy=#{options[:order_by]}&maxResults=#{options[:max_results]}&singleEvents=#{options[:expand_recurring_events]}"
+      query_string = "&orderBy=#{options[:order_by]}"
+      query_string << "&maxResults=#{options[:max_results]}"
+      query_string << "&singleEvents=#{options[:expand_recurring_events]}"
+      query_string << "&q=#{options[:query]}" if options[:query].present?
+      query_string << "&timeZone=#{CGI::escape(options[:timezone]}" if options[:timezone].present?
+      query_string
     end
 
     #
