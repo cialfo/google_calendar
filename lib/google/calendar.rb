@@ -6,7 +6,7 @@ module Google
   #
   class Calendar
 
-    attr_reader :id, :connection, :summary
+    attr_reader :id, :connection, :summary, :response_timezone_name
 
     #
     # Setup and connect to the specified Google Calendar.
@@ -302,6 +302,7 @@ module Google
         response = send_events_request(query_string, :get)
         parsed_json = JSON.parse(response.body)
         @summary = parsed_json['summary']
+        @response_timezone_name = parsed_json['timeZone']
         events = Event.build_from_google_feed(parsed_json, self) || []
         return events if events.empty?
         events.length > 1 ? events : [events[0]]
