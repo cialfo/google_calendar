@@ -93,7 +93,7 @@ module Google
     def login_with_auth_code(auth_code)
       @client.code = auth_code
       Connection.get_new_access_token(@client)
-      @client.refresh_token
+      @client.refresh_token || @client.access_token
     end
 
     #
